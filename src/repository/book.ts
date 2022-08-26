@@ -16,6 +16,7 @@ export class BookRepository implements IBookRepository {
     try {
       const q: QueryConfig = {
         text: `INSERT INTO books(
+          name,
           book_description,
           publication_year,
           author,
@@ -24,9 +25,11 @@ export class BookRepository implements IBookRepository {
           $1,
           $2,
           $3,
-          $4
+          $4,
+          $5
         ) RETURNING *`,
         values: [
+          data.name,
           data.description,
           data.publicationYear,
           data.author,
@@ -46,10 +49,44 @@ export class BookRepository implements IBookRepository {
         text: "SELECT * FROM books WHERE id = $1",
         values: [id]
       }
-      const res: BookDB[] = await query(q)     
+      const res = await query(q)     
       return res[0] ? dbToBook(res[0]) : null
     } catch (error: any) {
       throw new Error(error.message)
     }
+  }
+  
+  async update(data: Partial<Book>){
+    try {
+      console.log(data)
+      const q: QueryConfig = {
+        text: `UPDATE books SET 
+        name=$1,
+        book_description=$2,
+        publication_year=$3,
+        author=$4,
+        gender=$5,
+        updated_at=NOW()
+        WHERE id = $6
+        RETURNING *
+        `,
+        values: [
+          data.name,
+          data.description,
+          data.publicationYear,
+          data.author,
+          data.gender,
+          data.id
+        ]
+      }
+      const res = await query(q)
+      return dbToBook(res[0])     
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  }
+  
+  async _delete(){
+    
   }
 }

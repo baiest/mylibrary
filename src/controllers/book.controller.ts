@@ -1,9 +1,10 @@
+import { IBookRepository } from './../models/book';
 import { HttpStatusCode } from './../types/HttpStatusCode';
 import { BookRepository } from './../repository/book';
 import { Request, Response } from 'express';
-import { BookRequest, bookToResponse } from '../models/book';
+import { BookCreate, BookRequest, bookToResponse } from '../models/book';
 
-const bookRepository = new BookRepository()
+const bookRepository: IBookRepository = new BookRepository()
 
 export const getAll = async (_: Request, res: Response) => {
   try {
@@ -51,5 +52,30 @@ export const getById = async (req: Request, res: Response) => {
     res
     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
     .json({ message: error.stack })
+  }
+}
+
+export const update = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id)
+    
+    const book = await bookRepository.getById(id)
+    
+    if(!book) return res
+      .status(HttpStatusCode.NOT_FOUND)
+      .json(book)
+    
+    const data: Partial<BookRequest> = req.body
+    
+    const bookToUpdate = {...book, ...data}
+    if(data.publication_year) bookToUpdate.publicationYear = data.publication_year
+    const bookUpdated = await bookRepository.update(bookToUpdate)
+    
+    res  
+      .json(bookToResponse(bookUpdated))
+  } catch (error: any) {
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: error.stack})
   }
 }
