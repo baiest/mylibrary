@@ -6,8 +6,7 @@ export class BookRepository implements IBookRepository {
   async getAll(): Promise<Book[]>{
     try {
       const data: BookDB[] = await query("SELECT * FROM books")
-      const d = data.map(dbToBook)
-      return d
+      return data.map(dbToBook)
     } catch (error: any) {
       throw new Error(error.message)
     }
@@ -26,7 +25,7 @@ export class BookRepository implements IBookRepository {
           $2,
           $3,
           $4
-        )`,
+        ) RETURNING *`,
         values: [
           data.description,
           data.publicationYear,
@@ -35,7 +34,7 @@ export class BookRepository implements IBookRepository {
         ]
       }
       const res = await query(q)
-      return res[0]
+      return dbToBook(res[0])
     } catch (error: any) {
       throw new Error(error.message)
     }

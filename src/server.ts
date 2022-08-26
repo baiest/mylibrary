@@ -1,8 +1,8 @@
-import { router } from './services/book.service';
 import express from 'express'
 import { Express } from 'express'
 import * as db from './db/db';
 import dotenv from 'dotenv'
+import { routes } from './services/routes.service';
 /**
  * Server use pattern singleton
  */
@@ -29,7 +29,14 @@ export class Server {
   
   
   private addRoutes(app: Express){
-    app.use('/api/book', router)
+    routes.forEach(r => {
+      try {
+        app.use('/api/' + r.path, r.router) 
+        console.log('Route:', r.path)
+      } catch (error) {
+        console.error('Route not found: ', r.name)
+      }
+    })
   }
   
   start(){

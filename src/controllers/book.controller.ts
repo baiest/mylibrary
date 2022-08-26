@@ -25,7 +25,7 @@ export const create = async (req: Request, res: Response) => {
     })
     res
       .status(HttpStatusCode.CREATED)
-      .json(book)
+      .json(bookToResponse(book))
   } catch (error: any) {
     res
       .status(HttpStatusCode.BAD_REQUEST)
