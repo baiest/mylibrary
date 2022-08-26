@@ -1,4 +1,4 @@
-import { Pool } from 'pg'
+import { Pool, QueryConfig } from 'pg'
 import fs from 'fs'
 import path from 'path'
 import dotenv from 'dotenv'
@@ -30,12 +30,12 @@ export const connect = () => {
   })
 }
 
-export const select = async(query: string | { text: string, values: any[] }) => {
+export const query = async(query: string | QueryConfig) => {
   try {
     const res = await db.query(query)
-    console.log(res)
-    return res.rows[0]
-  } catch (error) {
+    return res.rows
+  } catch (error: any) {
     console.log(error)
+    throw error
   }
 } 
