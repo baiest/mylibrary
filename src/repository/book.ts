@@ -39,4 +39,17 @@ export class BookRepository implements IBookRepository {
       throw new Error(error.message)
     }
   }
+  
+  async getById(id: number){
+    try {
+      const q: QueryConfig = {
+        text: "SELECT * FROM books WHERE id = $1",
+        values: [id]
+      }
+      const res: BookDB[] = await query(q)     
+      return res[0] ? dbToBook(res[0]) : null
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
+  }
 }

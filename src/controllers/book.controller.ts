@@ -32,3 +32,24 @@ export const create = async (req: Request, res: Response) => {
       .json({ message: error.stack })
   }
 }
+
+export const getById = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id)
+    const book = await bookRepository.getById(id)
+    
+    if(!book){
+      return res
+        .status(HttpStatusCode.NOT_FOUND)
+        .json(book)
+    }
+    
+    res
+      .status(HttpStatusCode.CREATED)
+      .json(bookToResponse(book))
+  } catch (error: any) {
+    res
+    .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+    .json({ message: error.stack })
+  }
+}
