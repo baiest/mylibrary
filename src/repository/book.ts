@@ -86,7 +86,11 @@ export class BookRepository implements IBookRepository {
     }
   }
   
-  async _delete(){
-    
+  _delete(id: number){
+    try {
+      query(`DELETE FROM books WHERE id = ${id}`)
+    } catch (error: any) {
+      throw new Error(error.message)
+    }
   }
 }

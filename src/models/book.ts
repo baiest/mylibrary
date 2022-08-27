@@ -33,6 +33,7 @@ export interface IBookRepository {
   create(data: BookCreate): Promise<Book>
   getById(id: number): Promise<Book | null>
   update(data: Partial<BookCreate>): Promise<Book>
+  _delete(id: number): void
 }
 
 export const dbToBook = (book: BookDB): Book => {

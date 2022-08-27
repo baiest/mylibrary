@@ -79,3 +79,16 @@ export const update = async (req: Request, res: Response) => {
       .json({ message: error.stack})
   }
 }
+
+export const _delete = (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id)
+    
+    bookRepository._delete(id)
+    res.status(HttpStatusCode.NO_CONTENT).json()
+  } catch (error: any) {
+    res
+    .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+    .json({ message: error.stack})
+  }
+} 
