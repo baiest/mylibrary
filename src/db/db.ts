@@ -2,7 +2,7 @@ import { Pool, QueryConfig } from 'pg'
 import fs from 'fs'
 import path from 'path'
 import dotenv from 'dotenv'
-import { logger } from '../../utils/logger'
+import { logger } from '../utils/logger'
 dotenv.config()
 
 const up = fs.readFileSync(path.join(__dirname, 'library.sql')).toString()

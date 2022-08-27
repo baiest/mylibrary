@@ -3,8 +3,9 @@ import { Express } from 'express'
 import * as db from './db/db';
 import dotenv from 'dotenv'
 import { routes } from './services/routes.service';
-import { logger } from '../utils/logger';
+import { logger } from './utils/logger';
 import { logMiddleware } from './middlewares/logMiddleware';
+import cors from 'cors'
 /**
  * Server use pattern singleton
  */
@@ -26,6 +27,7 @@ export class Server {
   
   private addMiddlewares(app: Express){
     app.use(express.json())
+    app.use(cors())
     app.use(logMiddleware)
     app.use(express.urlencoded({ extended: true }))
   }
