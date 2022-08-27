@@ -3,6 +3,8 @@ import { Express } from 'express'
 import * as db from './db/db';
 import dotenv from 'dotenv'
 import { routes } from './services/routes.service';
+import { logger } from '../utils/logger';
+import { logMiddleware } from './middlewares/logMiddleware';
 /**
  * Server use pattern singleton
  */
@@ -24,23 +26,23 @@ export class Server {
   
   private addMiddlewares(app: Express){
     app.use(express.json())
+    app.use(logMiddleware)
     app.use(express.urlencoded({ extended: true }))
   }
   
-  
   private addRoutes(app: Express){
-    routes.forEach(r => {
+    for(let r of routes){
       try {
         app.use('/api/' + r.path, r.router) 
-        console.log('Route:', r.path)
+        logger.info('Route: /' + r.path)
       } catch (error) {
-        console.error('Route not found: ', r.name)
+        logger.error('Route not found: ' + r.path)
       }
-    })
+    }
   }
   
   start(){
     if(!this._app) return
-    this._app.listen(this.PORT, () => console.log(`Server listen in port ${this.PORT}`))
+    this._app.listen(this.PORT, () => logger.info(`Server listen in port ${this.PORT}`))
   }
 }

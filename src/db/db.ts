@@ -2,6 +2,7 @@ import { Pool, QueryConfig } from 'pg'
 import fs from 'fs'
 import path from 'path'
 import dotenv from 'dotenv'
+import { logger } from '../../utils/logger'
 dotenv.config()
 
 const up = fs.readFileSync(path.join(__dirname, 'library.sql')).toString()
@@ -15,7 +16,7 @@ const db = new Pool({
 })
 
 export const connect = () => {
-  console.log('Connecting database...')
+  logger.info('Connecting database...')
   db.connect((err, client, done) => {
     if(err){
       console.error(err)
@@ -35,7 +36,7 @@ export const query = async(query: string | QueryConfig) => {
     const res = await db.query(query)
     return res.rows
   } catch (error: any) {
-    console.log(error)
+    logger.error(error)
     throw error
   }
 } 

@@ -58,7 +58,6 @@ export class BookRepository implements IBookRepository {
   
   async update(data: Partial<Book>){
     try {
-      console.log(data)
       const q: QueryConfig = {
         text: `UPDATE books SET 
         name=$1,

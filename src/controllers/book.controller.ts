@@ -2,8 +2,11 @@ import { IBookRepository } from './../models/book';
 import { HttpStatusCode } from './../types/HttpStatusCode';
 import { BookRepository } from './../repository/book';
 import { Request, Response } from 'express';
-import { BookCreate, BookRequest, bookToResponse } from '../models/book';
+import { BookRequest, bookToResponse } from '../models/book';
 
+/**
+ * Repository contains all methods to persistence in db of respective model
+ */
 const bookRepository: IBookRepository = new BookRepository()
 
 export const getAll = async (_: Request, res: Response) => {
