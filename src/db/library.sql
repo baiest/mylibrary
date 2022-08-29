@@ -1,4 +1,4 @@
-DROP TABLE books;
+DROP TABLE IF EXISTS books;
 
 CREATE TABLE IF NOT EXISTS books (
   id SERIAL PRIMARY KEY,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS books (
   updated_at TIMESTAMP DEFAULT NOW()
 );
 
---VALUES DEFAULT
+VALUES DEFAULT
 INSERT INTO BOOKS (name, book_description, publication_year, author, gender)
 VALUES 
 ('Scream', 'Killer crazy', 2003, 'Yelena', 'terror'),

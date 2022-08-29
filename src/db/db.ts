@@ -5,7 +5,15 @@ import dotenv from 'dotenv'
 import { logger } from '../utils/logger'
 dotenv.config()
 
-const up = fs.readFileSync(path.join(__dirname, 'library.sql')).toString()
+const up = () => {
+  try {
+    const file = fs.readFileSync(path.join(__dirname, 'library.sql'), {encoding: 'utf-8', flag:'r'})
+    return file.toString()
+  } catch (error) {
+    logger.info('DB no initialized')
+    return ''
+  }
+}
 
 const db = new Pool({
   user: process.env.DB_USER,
@@ -22,7 +30,7 @@ export const connect = () => {
       console.error(err)
       process.exit(1)
     }
-    client.query(up, (err, _) => {
+    client.query(up(), (err, _) => {
       done()
       if(err){
         console.error(err)
